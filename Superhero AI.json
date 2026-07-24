@@ -1,0 +1,273 @@
+{
+  "name": "Superhero AI",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -928,
+        -48
+      ],
+      "id": "89e074c8-8299-4ef0-819a-3e8dc6c267b3",
+      "name": "Telegram Trigger",
+      "webhookId": "601163eb-4ae7-4a16-b9f0-4b4fc614845d",
+      "credentials": {
+        "telegramApi": {
+          "id": "HWOpZm17qwHBX7XU",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=You are a superhero database assistant on Telegram. You have access to a \"Superhero database\" tool containing 731 characters with biography, appearance, and power stats.\n\nAddress the user with his name: {{ $json.message.from.first_name }}\n\nWhen the user asks about a character:\n1. Before calling the tool, convert the character's name to the closest standard superhero-name spelling as it would likely appear in a comic database — proper capitalization and correct hyphenation (e.g. \"spider man\" → \"Spider-Man\", \"ironman\" → \"Iron Man\", \"dr strange\" → \"Doctor Strange\"). Call the Superhero database tool once using that normalized name, not the user's raw wording.\n2. Only use rows where the name field itself matches the character asked about (ignoring case, spacing, hyphens). Ignore any row that merely mentions the character elsewhere, such as in group_affiliation or relatives, but has a different name.\n3. If more than one row has that same matching name (e.g. three separate \"Spider-Man\" entries for different versions), they are interchangeable — pick any one of them, then use ALL of its fields together for this reply: reply, hero_name, and image_url must all come from that same single row. Never mix fields from different rows.\n4. Answer using only the data returned. Never invent stats or facts not present in the table.\n5. If the tool returns nothing, tell the user you couldn't find that character and suggest checking the spelling.\n6. If the message isn't about a specific character (greetings, small talk, \"what can you do\"), don't call the tool — just respond conversationally and explain you can look up hero stats and bios.\n\nTailor your answer to what's actually asked:\n- Origin/identity questions (\"who is X\", \"tell me about X\") → full name, publisher, first appearance, alignment, race, and a one-line description only. NO powerstats.\n- Physical description questions → race, height, weight, eye/hair color only. NO powerstats.\n- Strength/power questions (\"how strong is X\", \"what's his combat skill\", \"power stats\") → THIS is the only case where you mention powerstats (strength, speed, intelligence, durability, power, combat).\n- Vague \"who is X\" → treat as an identity question above. Do NOT default to listing all six powerstats just because you have the numbers.\n\nHard rule: never output any of intelligence, strength, speed, durability, power, or combat numbers unless the user's message explicitly asks about power, strength, stats, or ability level. Having the data available is not a reason to include it. When unsure, omit stats — a short identity/bio answer is always the safe default.\n\nEach reply is judged independently based only on what the current message asks, never on how you answered previous messages in this conversation.\n\nYou have conversation memory — if the user asks a follow-up like \"what about his speed\" or \"and who are his enemies\", refer back to the character and specific row discussed earlier rather than asking again who they mean.\n\nKeep replies short — 3 to 5 sentences, plain text, Telegram-friendly (no markdown tables, minimal emoji).\n\nNever call the Superhero database tool more than once per user message. Use your own knowledge if you find that the data given in the table is actually misleading.\n\nYour output must always be structured with these fields:\n- reply: your short, Telegram-friendly answer as described above.\n- hero_found: true if a name-matching row was found for this message, false otherwise.\n- hero_name: the name field exactly as it appears in the row you picked.\n- image_url: the image_url field from that same row, copied character-for-character from the Superhero database tool's result for THIS specific message only. Never reuse, recall, or repeat an image_url, hero_name, or reply from an earlier turn stored in memory — even if it was the most recent character discussed — no matter how similar or convenient it seems. Each message requires its own fresh tool call output. Do not use any URL from your own knowledge either. Never return an empty string for image_url; never substitute, construct, or recall a URL from anywhere else.",
+          "maxIterations": 3
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -704,
+        -48
+      ],
+      "id": "d40b7ec8-0267-4035-b28c-31314ea13796",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {
+          "temperature": 0.8
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -848,
+        192
+      ],
+      "id": "3e4e3c6d-480d-4200-afd2-2a80aadc8b89",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "Rw0rQX7y6B805KGI",
+          "name": "Groq API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output.reply }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -224,
+        -144
+      ],
+      "id": "6c5f502a-a47b-4c06-9811-1f832d229da2",
+      "name": "Send a text message",
+      "webhookId": "c575867c-3a62-4d48-aeab-e8e518ed6155",
+      "alwaysOutputData": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "HWOpZm17qwHBX7XU",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"reply\": \"Batman is a vigilante from DC Comics...\",\n  \"hero_found\": true,\n  \"hero_name\": \"batman\",\n  \"image_url\": \"https://www.superherodb.com/pictures2/portraits/10/100/635.jpg\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -368,
+        192
+      ],
+      "id": "3cb5862d-20de-4759-b032-440a920274e2",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Looks up a superhero or supervillain by name in a database of 731 characters. Returns full biography, physical appearance, power stats (intelligence, strength, speed, durability, power, combat) and image_url. Use this whenever the user asks anything about a specific character by name.",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "lxwDCQgLfBy2csDU",
+          "mode": "list",
+          "cachedResultName": "superheroes",
+          "cachedResultUrl": "/projects/z8pKrQMhiiEB72tE/datatables/lxwDCQgLfBy2csDU"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "name",
+              "condition": "ilike",
+              "keyValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('conditions0_Value', ``, 'string') }}"
+            },
+            {
+              "keyName": "full_name",
+              "condition": "ilike",
+              "keyValue": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('conditions1_Value', ``, 'string') }}"
+            }
+          ]
+        },
+        "limit": 5
+      },
+      "type": "n8n-nodes-base.dataTableTool",
+      "typeVersion": 1.1,
+      "position": [
+        -528,
+        192
+      ],
+      "id": "1bbdc3a6-fb95-4fe0-9afe-146dfccc91eb",
+      "name": "Superhero database"
+    },
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "file": "={{ $json.output.image_url }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -224,
+        48
+      ],
+      "id": "11d72f69-9ce0-4db7-96fb-7d06147bc063",
+      "name": "Send a photo message",
+      "webhookId": "6aa00e79-cad4-4dec-a21f-6432c9d8072b",
+      "alwaysOutputData": true,
+      "credentials": {
+        "telegramApi": {
+          "id": "HWOpZm17qwHBX7XU",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.message.from.id }}",
+        "contextWindowLength": 3
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -688,
+        192
+      ],
+      "id": "39cd8afc-d7de-46e7-bbef-891e9cda5929",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a photo message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Superhero database": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "b9ad2b72-dc23-495b-9b6a-890b827a1260",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3a378533415422e37865e4b6cc2c68e7c452be7b9d1ffb2a648aefd527a9c2cc"
+  },
+  "nodeGroups": [],
+  "id": "Q4tjCbVt2GfPw9RG",
+  "tags": []
+}

@@ -1,0 +1,450 @@
+{
+  "name": "Superhero extraction",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "=https://www.superheroapi.com/api.php/c4f265faf0dddc385ff786c0c5518da5/{{ $json.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        704,
+        0
+      ],
+      "id": "92a8f488-e712-469c-94b3-83a614aa5121",
+      "name": "Superhero Data Request"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "31612ac8-fa40-42f9-8da6-216817e7b4dd",
+      "name": "Manual Trigger"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "lxwDCQgLfBy2csDU",
+          "mode": "list",
+          "cachedResultName": "superheroes",
+          "cachedResultUrl": "/projects/z8pKrQMhiiEB72tE/datatables/lxwDCQgLfBy2csDU"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "name": "={{ $json.name }}",
+            "sup_id": "={{ $json.id }}",
+            "intelligence": "={{ $json.intelligence }}",
+            "strength": "={{ $json.strength }}",
+            "speed": "={{ $json.speed }}",
+            "durability": "={{ $json.durability }}",
+            "power": "={{ $json.power }}",
+            "combat": "={{ $json.combat }}",
+            "full_name": "={{ $json.full_name }}",
+            "gender": "={{ $json.gender }}",
+            "place_of_birth": "={{ $json.place_of_birth }}",
+            "first_appearance": "={{ $json.first_appearance }}",
+            "publisher": "={{ $json.publisher }}",
+            "alignment": "={{ $json.alignment }}",
+            "race": "={{ $json.race }}",
+            "height": "={{ $json.height_imperial }}",
+            "weight": "={{ $json.weight_metric }}",
+            "eye_color": "={{ $json.eye_color }}",
+            "hair_color": "={{ $json.hair_color }}",
+            "occupation": "={{ $json.occupation }}",
+            "work_base": "={{ $json.base }}",
+            "group_affiliation": "={{ $json.group_affiliation }}",
+            "relatives": "={{ $json.relatives }}",
+            "image_url": "={{ $json.image_url }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "sup_id",
+              "displayName": "sup_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "full_name",
+              "displayName": "full_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "gender",
+              "displayName": "gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "place_of_birth",
+              "displayName": "place_of_birth",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "first_appearance",
+              "displayName": "first_appearance",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "publisher",
+              "displayName": "publisher",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "alignment",
+              "displayName": "alignment",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "race",
+              "displayName": "race",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "height",
+              "displayName": "height",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "weight",
+              "displayName": "weight",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "eye_color",
+              "displayName": "eye_color",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "hair_color",
+              "displayName": "hair_color",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "occupation",
+              "displayName": "occupation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "work_base",
+              "displayName": "work_base",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "group_affiliation",
+              "displayName": "group_affiliation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "relatives",
+              "displayName": "relatives",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "intelligence",
+              "displayName": "intelligence",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "strength",
+              "displayName": "strength",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "speed",
+              "displayName": "speed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "durability",
+              "displayName": "durability",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "power",
+              "displayName": "power",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "combat",
+              "displayName": "combat",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "image_url",
+              "displayName": "image_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "3152ba20-bd37-4ee7-8b10-b9569bdfc7bb",
+      "name": "Insert data to table",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.item.json;\n\n// Converts placeholder junk values into real null\nconst clean = (val) => {\n  if (val === null || val === undefined) return null;\n  if (typeof val === 'string') {\n    const trimmed = val.trim();\n    if (trimmed === '' || trimmed === '-' || trimmed.toLowerCase() === 'null') {\n      return null;\n    }\n    return trimmed;\n  }\n  if (Array.isArray(val)) {\n    // e.g. aliases: [\"-\"] should become null, not [\"-\"]\n    const cleanedArr = val.map(clean).filter(v => v !== null);\n    return cleanedArr.length ? cleanedArr : null;\n  }\n  return val;\n};\n\n// Helper for numeric stat fields — cleans, then converts to number or null\nconst cleanNumber = (val) => {\n  const c = clean(val);\n  return c === null ? null : Number(c);\n};\n\n// height/weight come as [\"5'8\\\"\", \"173 cm\"] — split imperial vs metric\nconst firstOrNull = (arr) => {\n  const c = clean(arr);\n  return c ? c[0] : null;\n};\nconst secondOrNull = (arr) => {\n  const c = clean(arr);\n  return c && c.length > 1 ? c[1] : null;\n};\n\nreturn {\n  json: {\n    id: item.id ?? null,\n    name: clean(item.name),\n\n    // powerstats\n    intelligence: cleanNumber(item.powerstats?.intelligence),\n    strength: cleanNumber(item.powerstats?.strength),\n    speed: cleanNumber(item.powerstats?.speed),\n    durability: cleanNumber(item.powerstats?.durability),\n    power: cleanNumber(item.powerstats?.power),\n    combat: cleanNumber(item.powerstats?.combat),\n\n    // biography\n    full_name: clean(item.biography?.['full-name']),\n    alter_egos: clean(item.biography?.['alter-egos']),\n    aliases: clean(item.biography?.aliases)?.join(', ') ?? null,\n    place_of_birth: clean(item.biography?.['place-of-birth']),\n    first_appearance: clean(item.biography?.['first-appearance']),\n    publisher: clean(item.biography?.publisher),\n    alignment: clean(item.biography?.alignment),\n\n    // appearance\n    gender: clean(item.appearance?.gender),\n    race: clean(item.appearance?.race),\n    height_imperial: firstOrNull(item.appearance?.height),\n    height_metric: secondOrNull(item.appearance?.height),\n    weight_imperial: firstOrNull(item.appearance?.weight),\n    weight_metric: secondOrNull(item.appearance?.weight),\n    eye_color: clean(item.appearance?.['eye-color']),\n    hair_color: clean(item.appearance?.['hair-color']),\n\n    // work\n    occupation: clean(item.work?.occupation),\n    base: clean(item.work?.base),\n\n    // connections\n    group_affiliation: clean(item.connections?.['group-affiliation']),\n    relatives: clean(item.connections?.relatives),\n\n    // image\n    image_url: clean(item.image?.url)\n  }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        0
+      ],
+      "id": "432d0c51-4443-401d-a2b9-0ac872ed3ca6",
+      "name": "Check fields"
+    },
+    {
+      "parameters": {
+        "batchSize": "={{ 1 }}",
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        464,
+        0
+      ],
+      "id": "f0e67b55-c536-4c47-b15f-3f80394c033f",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "const ids = [];\nfor (let i = 1; i <= 731; i++) {\n  ids.push({ json: { id: i } });\n}\nreturn ids;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e3b80ea0-cfeb-4bbc-ac4b-bf7ca65093bc",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Superhero Data Request": {
+      "main": [
+        [
+          {
+            "node": "Check fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert data to table": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check fields": {
+      "main": [
+        [
+          {
+            "node": "Insert data to table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Superhero Data Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "204fa4a2-9158-4402-a272-47bea576a892",
+  "meta": {
+    "instanceId": "3a378533415422e37865e4b6cc2c68e7c452be7b9d1ffb2a648aefd527a9c2cc"
+  },
+  "nodeGroups": [],
+  "id": "GpPR2ffiF1jQ3DAV",
+  "tags": []
+}
